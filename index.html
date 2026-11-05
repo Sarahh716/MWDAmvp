@@ -85,103 +85,158 @@ td.best{font-weight:700;color:var(--teal)}
 .post p{margin:2px 0 8px}
 .post small{color:var(--muted)}
 .tag{display:inline-block;background:var(--tint);color:var(--teal);font-weight:700;font-size:.8rem;padding:1px 8px;border-radius:99px;margin-right:6px}
+.sw{position:relative}
+.sw.New,.tile.New{background:#ece6d8}.sw.Resale,.tile.Resale{background:#dfe6f0}
+.pill.Resale{border-color:var(--orange);color:var(--orange)}
+.card.sold{opacity:.65}
+.soldtag,.fresh{position:absolute;top:8px;left:8px;font-size:.78rem;font-weight:700;padding:2px 10px;border-radius:99px}
+.soldtag{background:var(--ink);color:var(--on-ink)}.fresh{background:var(--teal);color:var(--surface)}
+.row{flex-wrap:wrap}
+.btn:disabled{opacity:.5;cursor:default}
+.sbar input{width:100%;padding:12px 18px;border:1px solid var(--line);border-radius:99px;background:var(--surface);color:var(--ink);font:inherit}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.filters select{padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.explore{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:150px;grid-auto-flow:dense;gap:4px}
+@media (min-width:700px){.explore{grid-template-columns:repeat(4,1fr);grid-auto-rows:200px}}
+.tile{position:relative;border:0;padding:0;display:grid;place-items:center;overflow:hidden}
+.tile:nth-child(5n+1){grid-row:span 2}
+.tile svg{width:46%;height:46%}
+.tile .cap{position:absolute;left:0;right:0;bottom:0;padding:18px 8px 6px;font-size:.8rem;font-weight:700;color:#fff;text-align:left;background:linear-gradient(transparent,rgba(16,20,38,.8))}
 @media (max-width:560px){.brand h1{font-size:2.1rem}nav button{padding:12px 12px}.bar{grid-template-columns:90px 1fr 60px}}
 @media (prefers-reduced-motion:no-preference){.verdict{animation:in .35s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="shirt" viewBox="0 0 100 100"><path d="M36 12 18 22 5 43l15 8 6-8v46h48V43l6 8 15-8-13-21-18-10c-3 9-25 9-28 0Z" fill="#fff" stroke="#16224a" stroke-width="3" stroke-linejoin="round"/><path d="M50 22v64" stroke="#16224a" stroke-width="2"/><circle cx="50" cy="38" r="1.8" fill="#16224a"/><circle cx="50" cy="54" r="1.8" fill="#16224a"/><circle cx="50" cy="70" r="1.8" fill="#16224a"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="shirt" viewBox="0 0 100 100"><path d="M36 12 18 22 5 43l15 8 6-8v46h48V43l6 8 15-8-13-21-18-10c-3 9-25 9-28 0Z" fill="currentColor" stroke="#16224a" stroke-width="3" stroke-linejoin="round"/><path d="M50 22v64" stroke="#16224a" stroke-width="2"/></symbol>
+<symbol id="pants" viewBox="0 0 100 100"><path d="M30 10h40l6 82H56L50 42l-6 50H24Z" fill="currentColor" stroke="#16224a" stroke-width="3" stroke-linejoin="round"/></symbol>
+<symbol id="dress" viewBox="0 0 100 100"><path d="M42 8h16l3 24 20 60H19l20-60Z" fill="currentColor" stroke="#16224a" stroke-width="3" stroke-linejoin="round"/></symbol>
+<symbol id="bag" viewBox="0 0 100 100"><path d="M22 38h56l6 54H16Z" fill="currentColor" stroke="#16224a" stroke-width="3" stroke-linejoin="round"/><path d="M36 38c0-20 28-20 28 0" fill="none" stroke="#16224a" stroke-width="3"/></symbol>
+</defs></svg>
 <header>
   <div class="strip gingham"></div>
   <div class="wrap">
     <div class="brand"><h1>MWDA</h1><p>fashion made easy</p></div>
     <nav role="tablist" aria-label="Sections">
-      <button role="tab" id="t-profile" data-tab="profile">Your profile</button>
-      <button role="tab" id="t-updates" data-tab="updates">Updates</button>
-      <button role="tab" id="t-discover" data-tab="discover">Discover</button>
+      <button role="tab" id="t-search" data-tab="search">Search</button>
+      <button role="tab" id="t-thrift" data-tab="thrift">Thrifting</button>
+      <button role="tab" id="t-resale" data-tab="resale">Resale</button>
+      <button role="tab" id="t-profile" data-tab="profile">Profile</button>
     </nav>
   </div>
 </header>
 <main class="wrap">
+  <section id="search" role="tabpanel" hidden></section>
+  <section id="thrift" role="tabpanel" hidden></section>
+  <section id="resale" role="tabpanel" hidden></section>
   <section id="profile" role="tabpanel" hidden></section>
-  <section id="updates" role="tabpanel" hidden></section>
-  <section id="discover" role="tabpanel" hidden></section>
 </main>
 <script>
-var items=[
- {id:"zara",store:"Zara",kind:"New",name:"Poplin shirt",price:149,cond:100,fabric:"Cotton poplin",fit:"Relaxed",sizes:"XS to XL",bg:"#ece6d8"},
- {id:"hm",store:"H&M",kind:"New",name:"Regular-fit cotton shirt",price:99,cond:100,fabric:"Cotton",fit:"Regular",sizes:"XS to XXL",bg:"#e4e8ee"},
- {id:"gio",store:"Giordano",kind:"New",name:"Classic Oxford shirt",price:119,cond:100,fabric:"Cotton Oxford",fit:"Regular",sizes:"S to XXL",bg:"#ead9d2"},
- {id:"sam",store:"Sam’s Store, Nahda",kind:"Thrift",name:"Pre-loved cotton shirt",price:25,cond:78,fabric:"Cotton blend",fit:"Relaxed",sizes:"M (one piece)",note:"Light collar wear, no stains",bg:""}
-];
-var sel={zara:1,hm:1,gio:1,sam:1};
+var K="id,store,kind,name,price,cond,cat,who,color,hex,size,style,tags".split(",");
+var raw=[
+["zara","Zara","New","Poplin shirt",149,100,"Tops","Women","White","#ffffff","XS S M L XL","Casual","cotton shirt classic"],
+["hm","H&M","New","Regular-fit cotton shirt",99,100,"Tops","Men","White","#ffffff","S M L XL","Casual","cotton shirt"],
+["gio","Giordano","New","Classic Oxford shirt",119,100,"Tops","Men","White","#ffffff","S M L XL","Formal","oxford shirt cotton"],
+["zdj","Zara","New","Denim jacket",229,100,"Outerwear","Women","Blue","#5b7fa6","S M L","Casual","denim jacket"],
+["hmt","H&M","New","Linen trousers",129,100,"Bottoms","Women","Beige","#d8c7a5","XS S M L","Casual","linen summer trousers"],
+["gip","Giordano","New","Knit polo",89,100,"Tops","Men","Black","#2a2d3a","M L XL","Casual","knit polo"],
+["sam","Sam’s Store, Nahda","Thrift","Pre-loved cotton shirt",25,78,"Tops","Women","White","#ffffff","M","Casual","vintage cotton shirt"],
+["sdr","Sam’s Store, Nahda","Thrift","Vintage midi dress",45,80,"Dresses","Women","Green","#4f7f6a","S M","Casual","vintage dress"],
+["sbg","Sam’s Store, Nahda","Thrift","Pre-loved leather bag",60,85,"Bags","Women","Brown","#7a4b2a","OS","Formal","leather vintage bag"],
+["sdn","Sam’s Store, Nahda","Thrift","Pre-loved denim shirt",30,82,"Tops","Men","Blue","#6f8fb5","L","Streetwear","denim vintage shirt"],
+["smc","Sam’s Store, Nahda","Thrift","Wool overcoat",70,75,"Outerwear","Men","Grey","#6b6f76","L XL","Formal","wool coat"],
+["str","Sam’s Store, Nahda","Thrift","Pleated trousers",28,79,"Bottoms","Men","Black","#2a2d3a","M L","Formal","trousers pleated"],
+["skt","Sam’s Store, Nahda","Thrift","Kids striped tee",12,80,"Tops","Children","Navy","#2d4a8a","Kids","Casual","kids stripe tee"],
+["skd","Sam’s Store, Nahda","Thrift","Kids floral dress",18,85,"Dresses","Children","Pink","#e7a1b5","Kids","Casual","kids floral dress"],
+["rtc","Re:Wear marketplace","Resale","Zara trench coat",120,90,"Outerwear","Women","Beige","#c8b08a","S M","Formal","trench coat zara"],
+["rsd","@layla.closet","Resale","Satin slip dress",85,92,"Dresses","Women","Black","#2a2d3a","S","Streetwear","satin dress party"],
+["rjn","Closet Swap DXB","Resale","Straight-leg jeans",65,88,"Bottoms","Women","Blue","#4a6a94","M L","Casual","denim jeans"],
+["rlm","@omar.resells","Resale","Linen shirt",55,90,"Tops","Men","White","#ffffff","M L","Casual","linen shirt"],
+["rtt","Re:Wear marketplace","Resale","Canvas tote",40,95,"Bags","Women","Cream","#e8dcc0","OS","Casual","canvas tote bag"]];
+var items=raw.map(function(r){var o={};K.forEach(function(k,n){o[k]=r[n]});return o});
+var notes={sam:"Light collar wear, no stains"},fresh={sam:1,sdr:1,skd:1,rsd:1};
+var SYM={Tops:"shirt",Outerwear:"shirt",Bottoms:"pants",Dresses:"dress",Bags:"bag"};
+var LISTS={cat:["Tops","Bottoms","Dresses","Outerwear","Bags"],color:["White","Black","Blue","Beige","Grey","Green","Pink","Brown","Navy","Cream"],size:["XS","S","M","L","XL","OS","Kids"],style:["Casual","Formal","Streetwear"],kind:["New","Thrift","Resale"]};
+var LBL={cat:"Category",color:"Colour",size:"Size",style:"Style",kind:"Source"};
+var TAGS=["vintage","denim","linen","cotton","kids","leather","wool"];
+var sel={zara:1,hm:1,gio:1,sam:1},sold={},q="",fl={};
 var wish=[{name:"Denim jacket",store:"Zara",price:229},{name:"Pre-loved leather bag",store:"Sam’s Store, Nahda",price:60}];
 var bought=[{name:"Linen trousers",store:"H&M",price:129,when:"Sep 2026"},{name:"Pre-loved denim shirt",store:"Sam’s Store, Nahda",price:30,when:"Aug 2026"},{name:"Knit polo",store:"Giordano",price:89,when:"Jun 2026"}];
 var people=["Mariam R.","Omar H.","Dana S.","Yusuf A.","Huda T.","Khalid M."];
 var stores=["Sam’s Store, Nahda","Zara","H&M","Giordano"];
 var followers=new Set(["Mariam R.","Omar H.","Dana S.","Yusuf A.","Huda T."]);
 var following=new Set(["Mariam R.","Omar H.","Sam’s Store, Nahda","Zara","H&M"]);
-var tab="discover",pview="wishlist",feedF="all";
+var tab="search",pview="wishlist",tw="Women",rs="All";
 var $=function(s){return document.querySelector(s)};
 function adj(i){return Math.round(i.price/(i.cond/100))}
 function ini(n){return n.replace(/[^A-Za-z ]/g,"").split(" ").map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
 function inWish(n){return wish.some(function(w){return w.name===n})}
-function swatch(i){return '<div class="sw '+(i.kind==="Thrift"?"gingham":"")+'" style="'+(i.bg?"background:"+i.bg:"")+'"><svg role="img" aria-label="White shirt"><use href="#shirt"/></svg></div>'}
+function ico(i){return '<svg role="img" aria-label="'+i.color+" "+i.cat+'" style="color:'+i.hex+'"><use href="#'+SYM[i.cat]+'"/></svg>'}
+function pill(i){return '<span class="pill '+i.kind+'">'+i.kind+'</span>'}
 function card(i){
- var th=i.kind==="Thrift";
- return '<article class="card">'+swatch(i)+'<div class="cb"><div><span class="store">'+i.store+'</span><span class="pill '+(th?"thrift":"")+'">'+i.kind+'</span></div>'+
- '<div class="sub">'+i.name+'</div><div class="price">AED '+i.price+'</div>'+
- '<div class="sub">'+(th?"Condition "+i.cond+"/100: "+i.note:"New, "+i.sizes)+'</div>'+
- '<div class="row"><label class="chk"><input type="checkbox" data-cmp="'+i.id+'" '+(sel[i.id]?"checked":"")+'> Compare</label>'+
- '<button class="btn" data-wish="'+i.id+'" aria-pressed="'+inWish(i.name)+'">'+(inWish(i.name)?"Wishlisted":"Wishlist")+'</button></div></div></article>'}
+ var s=sold[i.id],nw=i.kind==="New";
+ return '<article class="card'+(s?" sold":"")+'"><div class="sw '+i.kind+(i.kind==="Thrift"?" gingham":"")+'">'+ico(i)+(s?'<span class="soldtag">Sold</span>':fresh[i.id]?'<span class="fresh">Just in</span>':'')+'</div><div class="cb"><div><span class="store">'+i.store+'</span>'+pill(i)+'</div><div class="sub">'+i.name+'</div><div class="price">AED '+i.price+'</div><div class="sub">'+(nw?"New · "+i.color+", "+i.size:"Condition "+i.cond+"/100"+(notes[i.id]?": "+notes[i.id]:""))+'</div>'+
+ '<div class="row"><label class="chk"><input type="checkbox" data-cmp="'+i.id+'"'+(sel[i.id]?" checked":"")+'> Compare</label><button class="btn" data-wish="'+i.id+'" aria-pressed="'+inWish(i.name)+'">'+(inWish(i.name)?"Wishlisted":"Wishlist")+'</button>'+(nw?"":'<button class="btn solid" data-buy="'+i.id+'"'+(s?" disabled":"")+'>'+(s?"Sold":"Buy")+'</button>')+'</div></div></article>'}
+function tile(i){return '<button class="tile '+i.kind+(i.kind==="Thrift"?" gingham":"")+'" data-open="'+i.id+'" aria-label="'+i.name+', '+i.store+', AED '+i.price+'">'+ico(i)+'<span class="cap">AED '+i.price+' · '+i.kind+'</span></button>'}
 function compare(){
  var s=items.filter(function(i){return sel[i.id]});
- if(s.length<2)return '<p class="empty">Select at least two shirts to compare them.</p>';
+ if(s.length<2)return "";
  var best=Math.min.apply(null,s.map(adj));
  function r(l,f,b){return '<tr><th scope="row">'+l+'</th>'+s.map(function(i){return '<td class="'+(i.kind==="Thrift"?"thr ":"")+(b&&adj(i)===best?"best":"")+'">'+f(i)+'</td>'}).join("")+'</tr>'}
- var h='<div class="tw"><table><thead><tr><th></th>'+s.map(function(i){return '<th class="'+(i.kind==="Thrift"?"thr":"")+'">'+i.store+'</th>'}).join("")+'</tr></thead><tbody>'+
- r("Price",function(i){return "AED "+i.price})+
- r("Condition",function(i){return i.kind==="Thrift"?i.cond+"/100, pre-loved":"New"})+
+ var h='<h3>Compare selected</h3><div class="tw"><table><thead><tr><th></th>'+s.map(function(i){return '<th class="'+(i.kind==="Thrift"?"thr":"")+'">'+i.store+'</th>'}).join("")+'</tr></thead><tbody>'+
+ r("Item",function(i){return i.name})+r("Price",function(i){return "AED "+i.price})+
+ r("Condition",function(i){return i.kind==="New"?"New":i.cond+"/100, "+i.kind.toLowerCase()})+
  r("Condition-adjusted price",function(i){return "AED "+adj(i)},1)+
- r("Fabric",function(i){return i.fabric})+r("Fit",function(i){return i.fit})+r("Sizes",function(i){return i.sizes})+'</tbody></table></div>';
+ r("Colour",function(i){return i.color})+r("Size",function(i){return i.size})+'</tbody></table></div>';
  var max=Math.max.apply(null,s.map(adj));
- h+='<div class="bars" aria-label="Condition-adjusted price">'+s.map(function(i){return '<div class="bar"><span>'+i.store+'</span><i class="'+(i.kind==="Thrift"?"t":"")+'" style="width:'+Math.max(4,adj(i)/max*100)+'%"></i><b>AED '+adj(i)+'</b></div>'}).join("")+'</div>';
- var t=s.filter(function(i){return i.kind==="Thrift"})[0],n=s.filter(function(i){return i.kind==="New"});
- if(t&&n.length){var c=n.reduce(function(a,b){return b.price<a.price?b:a});
-  h+='<div class="verdict"><b>Best value: '+t.store+'.</b> Adjusted for condition it costs AED '+adj(t)+', which is '+Math.round((1-adj(t)/c.price)*100)+'% less than the cheapest new option ('+c.store+', AED '+c.price+').</div>'}
- return h+'<p class="note">Condition-adjusted price turns a thrift price into a new-equivalent price using condition, wear, age and material. These are sample listings with illustrative prices.</p>'}
-function discover(){
- return '<h2>Discover</h2><p class="lede">Browse new and thrift listings side by side, then compare similar items.</p>'+
- '<div class="chips" role="group" aria-label="Category"><button class="chip" aria-pressed="true">White shirts</button><button class="chip" aria-pressed="false" disabled>Jeans</button><button class="chip" aria-pressed="false" disabled>Jackets</button></div>'+
- '<div class="grid">'+items.map(card).join("")+'</div><h3>Compare similar items</h3>'+compare()}
+ h+='<div class="bars" aria-label="Condition-adjusted price">'+s.map(function(i){return '<div class="bar"><span>'+i.store+'</span><i class="'+(i.kind==="New"?"":"t")+'" style="width:'+Math.max(4,adj(i)/max*100)+'%"></i><b>AED '+adj(i)+'</b></div>'}).join("")+'</div>';
+ var u=s.filter(function(i){return i.kind!=="New"}).sort(function(a,b){return adj(a)-adj(b)})[0],n=s.filter(function(i){return i.kind==="New"}).sort(function(a,b){return a.price-b.price})[0];
+ if(u&&n&&adj(u)<n.price)h+='<div class="verdict"><b>Best value: '+u.store+'.</b> Adjusted for condition it costs AED '+adj(u)+', which is '+Math.round((1-adj(u)/n.price)*100)+'% less than the cheapest new option ('+n.store+', AED '+n.price+').</div>';
+ return h+'<p class="note">Condition-adjusted price turns a second-hand price into a new-equivalent price using condition, wear, age and material. These are sample listings with illustrative prices.</p>'}
+function opts(k){return '<select data-f="'+k+'" aria-label="'+LBL[k]+'"><option value="">'+LBL[k]+'</option>'+LISTS[k].map(function(v){return '<option'+(fl[k]===v?" selected":"")+'>'+v+'</option>'}).join("")+'</select>'}
+function search(){
+ return '<h2>Search</h2><div class="sbar" style="margin-top:12px"><input id="q" type="search" placeholder="Search shirts, denim, vintage, linen…" value="'+q.replace(/"/g,"&quot;")+'" aria-label="Search clothing"></div><div class="filters">'+Object.keys(LISTS).map(opts).join("")+'<button class="btn" data-clear="1">Clear</button></div><div class="chips">'+TAGS.map(function(t){return '<button class="chip" data-tag="'+t+'" aria-pressed="'+(q===t)+'">#'+t+'</button>'}).join("")+'</div><div id="sres"></div>'}
+function match(i){
+ var h=[i.name,i.store,i.tags,i.color,i.cat,i.style,i.who,i.kind].join(" ").toLowerCase();
+ return q.toLowerCase().split(/\s+/).filter(Boolean).every(function(w){return h.indexOf(w)>-1})&&(!fl.cat||i.cat===fl.cat)&&(!fl.color||i.color===fl.color)&&(!fl.style||i.style===fl.style)&&(!fl.kind||i.kind===fl.kind)&&(!fl.size||(" "+i.size+" ").indexOf(" "+fl.size+" ")>-1)}
+function sres(){
+ var on=q.trim()||Object.keys(fl).some(function(k){return fl[k]}),h;
+ if(on){var r=items.filter(match);h='<p class="sub">'+r.length+" result"+(r.length===1?"":"s")+'</p>'+(r.length?'<div class="grid">'+r.map(card).join("")+'</div>':'<p class="empty">Nothing matched. Try another word or clear the filters.</p>')}
+ else h='<h3>Explore</h3><div class="explore">'+items.map(tile).join("")+'</div>';
+ $("#sres").innerHTML=h+compare()}
+function thrift(){
+ var l=items.filter(function(i){return i.kind==="Thrift"&&i.who===tw}),a=l.filter(function(i){return!sold[i.id]}).length;
+ l.sort(function(x,y){return(!!sold[x.id])-(!!sold[y.id])});
+ return '<h2>Thrifting</h2><p class="lede">One-of-a-kind second-hand pieces from local stores. Stock changes as items sell and new ones arrive.</p><div class="chips">'+["Men","Women","Children"].map(function(w){return '<button class="chip" data-tw="'+w+'" aria-pressed="'+(tw===w)+'">'+w+'</button>'}).join("")+'</div><p class="sub" style="margin-bottom:12px">'+a+" available, "+(l.length-a)+' sold</p><div class="grid">'+l.map(card).join("")+'</div>'+compare()}
+function resale(){
+ var S=["All"];items.forEach(function(i){if(i.kind==="Resale"&&S.indexOf(i.store)<0)S.push(i.store)});
+ var l=items.filter(function(i){return i.kind==="Resale"&&(rs==="All"||i.store===rs)});
+ return '<h2>Resale</h2><p class="lede">Pre-owned pieces from participating sellers and platforms.</p><div class="chips">'+S.map(function(w){return '<button class="chip" data-rs="'+w+'" aria-pressed="'+(rs===w)+'">'+w+'</button>'}).join("")+'</div><div class="grid">'+l.map(card).join("")+'</div>'+compare()}
 function personRow(n,isStore){
  var f=following.has(n);
  return '<div class="li"><div class="av s">'+ini(n)+'</div><div class="g"><b>'+n+'</b><small>'+(isStore?"Store":"Shopper")+'</small></div><button class="btn '+(f?"":"solid")+'" data-follow="'+n+'">'+(f?"Following":"Follow")+'</button></div>'}
+var feed=[
+ {w:"p",who:"Mariam R.",t:"Posted an outfit",txt:"White shirt, wide jeans, nothing else.",tag:"Giordano Classic Oxford shirt",time:"2h ago"},
+ {w:"s",who:"Sam’s Store, Nahda",t:"New drop",txt:"14 white and cream shirts just listed.",tag:"Thrift",time:"3h ago",go:"thrift"},
+ {w:"p",who:"Omar H.",t:"Bought",txt:"Regular-fit cotton shirt, AED 99.",tag:"H&M",time:"5h ago"},
+ {w:"s",who:"Zara",t:"New arrivals",txt:"Linen-blend shirts in white and sand.",tag:"New",time:"Yesterday",go:"search"},
+ {w:"p",who:"Dana S.",t:"Wishlisted",txt:"Pre-loved cotton shirt, AED 25.",tag:"Sam’s Store, Nahda",time:"Yesterday"}];
+function post(p){return '<article class="post '+(p.w==="s"?"store":"")+'"><div class="av s">'+ini(p.who)+'</div><div><b>'+p.who+'</b> <small>'+p.t+' · '+p.time+'</small><p>'+p.txt+'</p><span class="tag">'+p.tag+'</span>'+(p.go?'<button class="btn" data-go="'+p.go+'">See listings</button>':"")+'</div></article>'}
 function profile(){
  var v;
- if(pview==="wishlist")v=wish.length?'<div class="list">'+wish.map(function(w,k){return '<div class="li"><div class="g"><b>'+w.name+'</b><small>'+w.store+'</small></div><b>AED '+w.price+'</b><button class="btn" data-unwish="'+k+'">Remove</button></div>'}).join("")+'</div>':'<p class="empty">Your wishlist is empty. Heart a listing in Discover to save it here.</p>';
+ if(pview==="wishlist")v=wish.length?'<div class="list">'+wish.map(function(w,k){return '<div class="li"><div class="g"><b>'+w.name+'</b><small>'+w.store+'</small></div><b>AED '+w.price+'</b><button class="btn" data-unwish="'+k+'">Remove</button></div>'}).join("")+'</div>':'<p class="empty">Your wishlist is empty. Tap Wishlist on any listing to save it here.</p>';
  else if(pview==="purchases")v='<div class="list">'+bought.map(function(w){return '<div class="li"><div class="g"><b>'+w.name+'</b><small>'+w.store+', '+w.when+'</small></div><b>AED '+w.price+'</b></div>'}).join("")+'</div>';
+ else if(pview==="activity")v='<div class="feed">'+feed.map(post).join("")+'</div>';
  else if(pview==="followers")v='<div class="list">'+people.filter(function(p){return followers.has(p)}).map(function(p){return personRow(p)}).join("")+'</div>';
  else v='<div class="list">'+people.concat(stores).filter(function(p){return following.has(p)}).map(function(p){return personRow(p,stores.indexOf(p)>-1)}).join("")+(following.size?"":'<p class="empty">You aren’t following anyone yet.</p>')+'</div>';
  function st(k,l,n){return '<button class="stat" data-pv="'+k+'" aria-pressed="'+(pview===k)+'"><b>'+n+'</b>'+l+'</button>'}
  return '<div class="me"><div class="av">N</div><div><h2>Noor K.</h2><div class="sub">@noor.wears · Thrift first, new when I have to.</div></div></div>'+
- '<div class="stats">'+st("wishlist","Wishlist",wish.length)+st("purchases","Past purchases",bought.length)+st("followers","Followers",248)+st("following","Following",127+following.size)+'</div><h3>'+({wishlist:"Wishlist",purchases:"Past purchases",followers:"Followers",following:"Following"})[pview]+'</h3>'+v}
-var feed=[
- {w:"p",who:"Mariam R.",t:"Posted an outfit",txt:"White shirt, wide jeans, nothing else.",tag:"Giordano Classic Oxford shirt",time:"2h ago"},
- {w:"s",who:"Sam’s Store, Nahda",t:"New drop",txt:"14 white and cream shirts just listed.",tag:"Thrift",time:"3h ago",go:1},
- {w:"p",who:"Omar H.",t:"Bought",txt:"Regular-fit cotton shirt, AED 99.",tag:"H&M",time:"5h ago"},
- {w:"s",who:"Zara",t:"New arrivals",txt:"Linen-blend shirts in white and sand.",tag:"New",time:"Yesterday",go:1},
- {w:"p",who:"Dana S.",t:"Wishlisted",txt:"Pre-loved cotton shirt, AED 25.",tag:"Sam’s Store, Nahda",time:"Yesterday"}];
-function updates(){
- var f=feed.filter(function(p){return feedF==="all"||p.w===feedF});
- function ch(k,l){return '<button class="chip" data-ff="'+k+'" aria-pressed="'+(feedF===k)+'">'+l+'</button>'}
- return '<h2>Updates</h2><p class="lede">What the people and stores you follow are posting, buying and dropping.</p><div class="chips">'+ch("all","All")+ch("p","People")+ch("s","Stores")+'</div><div class="feed">'+
- f.map(function(p){return '<article class="post '+(p.w==="s"?"store":"")+'"><div class="av s">'+ini(p.who)+'</div><div><b>'+p.who+'</b> <small>'+p.t+' · '+p.time+'</small><p>'+p.txt+'</p><span class="tag">'+p.tag+'</span>'+(p.go?'<button class="btn" data-go="discover">See listings</button>':"")+'</div></article>'}).join("")+'</div>'}
-var views={profile:profile,updates:updates,discover:discover};
+ '<div class="stats">'+st("wishlist","Wishlist",wish.length)+st("purchases","Purchases",bought.length)+st("activity","Activity",feed.length)+st("followers","Followers",248)+st("following","Following",127+following.size)+'</div><h3>'+({wishlist:"Wishlist",purchases:"Past purchases",activity:"From people and stores you follow",followers:"Followers",following:"Following"})[pview]+'</h3>'+v}
+var views={search:search,thrift:thrift,resale:resale,profile:profile};
 function render(){
- ["profile","updates","discover"].forEach(function(k){
+ Object.keys(views).forEach(function(k){
   var el=$("#"+k),on=k===tab;el.hidden=!on;$("#t-"+k).setAttribute("aria-selected",on);
-  if(on){el.innerHTML=views[k]()}});
+  if(on){el.innerHTML=views[k]();if(k==="search")sres()}});
 }
 function go(k){tab=k;if(location.hash!=="#"+k)location.hash=k;render();window.scrollTo(0,0)}
 document.addEventListener("click",function(e){
@@ -189,15 +244,22 @@ document.addEventListener("click",function(e){
  if(d.tab)return go(d.tab);
  if(d.go)return go(d.go);
  if(d.wish){var i=items.filter(function(x){return x.id===d.wish})[0];
-  if(inWish(i.name))wish=wish.filter(function(w){return w.name!==i.name});else wish.push({name:i.name,store:i.store,price:i.price});}
+  if(inWish(i.name))wish=wish.filter(function(w){return w.name!==i.name});else wish.push({name:i.name,store:i.store,price:i.price})}
+ else if(d.buy){var p=items.filter(function(x){return x.id===d.buy})[0];sold[p.id]=1;bought.unshift({name:p.name,store:p.store,price:p.price,when:"Just now"})}
+ else if(d.open){var o=items.filter(function(x){return x.id===d.open})[0];q=o.name.split(" ").pop().toLowerCase();fl={}}
+ else if(d.tag)q=q===d.tag?"":d.tag;
+ else if(d.clear){q="";fl={}}
+ else if(d.tw)tw=d.tw;
+ else if(d.rs)rs=d.rs;
  else if(d.unwish)wish.splice(+d.unwish,1);
  else if(d.pv)pview=d.pv;
- else if(d.ff)feedF=d.ff;
  else if(d.follow){if(following.has(d.follow))following.delete(d.follow);else following.add(d.follow)}
  else return;
  render()});
-document.addEventListener("change",function(e){var c=e.target.dataset.cmp;if(c){sel[c]=e.target.checked?1:0;render()}});
-function route(){var h=location.hash.slice(1);tab=views[h]?h:"discover";render()}
+document.addEventListener("input",function(e){if(e.target.id==="q"){q=e.target.value;sres()}});
+document.addEventListener("change",function(e){var t=e.target,d=t.dataset;
+ if(d.f){fl[d.f]=t.value;sres()}else if(d.cmp){sel[d.cmp]=t.checked?1:0;render()}});
+function route(){var h=location.hash.slice(1);tab=views[h]?h:"search";render()}
 window.addEventListener("hashchange",route);route();
 </script>
 </body>
